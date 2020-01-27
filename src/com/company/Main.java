@@ -1,7 +1,5 @@
 package com.company;
 
-//FOR GUI
-import javax.swing.*;
 
 import java.util.Scanner;
 import java.util.LinkedList;
@@ -75,6 +73,7 @@ public class Main {
 
             //check continuation
             if (cont.equals("n")) {
+            	input.close();//close the scanner
                 break;
             }
         }

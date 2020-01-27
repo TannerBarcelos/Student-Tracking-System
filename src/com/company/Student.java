@@ -1,14 +1,7 @@
 package com.company;
 
-import org.jetbrains.annotations.Contract;
-
-import java.util.Scanner;
-
-//making class abstract: a student is too general! There are many types of students, so, we can abstract what it means to be a student and deal
-//with individual type of student details in sub-classes.
-// We did implement some basic getters in this class as every student will share the general properties of a name, ID, grad status etc.
-//however, a student is not a grad student! A grad student is a student however, so, we cant implement methods in this class for grad students as a student is
-//too general.
+//making class abstract: a student is too general! the printStudentInfo() is a pure virtual function, and too general for all sorts of students,
+//so in that case we must make the class abstract. see geeks4geeks for more info
 public abstract class Student {
 
     //making final so they cannot be changed later
@@ -19,8 +12,7 @@ public abstract class Student {
     protected final boolean hasGraduated;
     protected final String collegeLevel;
 
-    //constructor
-    @Contract(pure = true)
+    //consturctor
     public Student(String firstName, String lastName, String studentID, String gradLevel, boolean hasGraduated, double gpa) {
         this.firstName = firstName;
         this.lastName = lastName;
