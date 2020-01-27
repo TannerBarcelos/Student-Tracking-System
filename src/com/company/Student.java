@@ -1,5 +1,7 @@
 package com.company;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.Scanner;
 
 //making class abstract: a student is too general! There are many types of students, so, we can abstract what it means to be a student and deal
@@ -18,7 +20,8 @@ public abstract class Student {
     protected final String collegeLevel;
 
     //constructor
-    public Student(String firstName, String lastName, String studentID,String gradLevel, boolean hasGraduated,double gpa) {
+    @Contract(pure = true)
+    public Student(String firstName, String lastName, String studentID, String gradLevel, boolean hasGraduated, double gpa) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.student_ID = studentID;
