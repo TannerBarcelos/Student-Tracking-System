@@ -2,46 +2,61 @@ package com.company;
 
 
 import java.util.Scanner;
+import java.util.*;
+
 import java.util.LinkedList;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        //create a linked list to distribute the students in the system: of type student!!!
+        //create a linked list to distribute the students in the system: of type student
         LinkedList<Student> linked_list = new LinkedList<>();
-
-        //todo: implement error handling
+        
+        //variables initialized outside the scope of the while,try's so they are global and can be used within nested try/catch scopes or in the loop. This ensures object is made correctly
+        String firstName = "";
+        String lastName = "";
+        String gradLevel = "";
+        double GPA = 0.00;
+        
+        //create a scanner object for input
+        Scanner input = new Scanner(System.in);
 
         while(true) {
 
-            //create a scanner object for input
-            Scanner input = new Scanner(System.in);
-
             //get users first name
             System.out.println("Hello, what is your first name?");
-            String firstName = input.nextLine().toLowerCase();
+            firstName = input.nextLine().toLowerCase();
 
             //get users last name
             System.out.println("What is your last name?");
-            String lastName = input.nextLine().toLowerCase();
+            lastName = input.nextLine().toLowerCase();
 
             //get users student ID
             System.out.println("What is your student ID?");
             String studentID = input.nextLine().toLowerCase();
+           
+            //for nice flow, loop until the user enters in the correct format
+            while(true)
+            	try {
+            		//get gpa
+            		System.out.println("Please enter your gpa [x.xx]");
+            		GPA = input.nextDouble();  
+            		break;	//if input was correct format
+            	}
+            	//if the input is not a double, catch and return
+            	catch(InputMismatchException e) {
+            		System.out.println("Please only enter a numerical value in the form of x.xx");
+            		input.nextLine();	//reset the scanner to avoid infinite loop
+            	}
+            
 
-            //get gpa
-            System.out.println("Please enter your gpa [x.xx]");
-            double GPA = input.nextDouble();
-
-            //pick up new line to reset scanner to next input : this is important because when going from reading strings to numbers,
-            //when a number is read, the scanner stays on that same line, so we must completely reset that scanner to a new line to accomodate
-            //for a new string input!
+            //pick up new line to reset scanner to next input: different type inputs will not reset scanner to new line, so this i sa msut
             input.nextLine();
 
             //get users grad level: undergrad or graduate
             System.out.println("What is your graduate level [undergraduate/graduate]");
-            String gradLevel = input.nextLine().toLowerCase();
+            gradLevel = input.nextLine().toLowerCase();
 
 
             //if undergrad, get level. else, ignore and pass grad to object creation
@@ -53,7 +68,7 @@ public class Main {
                 //get if user has graduated
                 System.out.println("Have you graduated [true/false]");
                 String hasGraduated = input.nextLine().toLowerCase();   //will need to convert to boolean or change data typoes of classes to string
-                boolean graduated = hasGraduated.equals("true");    //assign boolean conversion to if user graduated or not (easy one liner)
+                boolean graduated = hasGraduated.equals("true");    	//assign boolean conversion to if user graduated or not (easy one liner)
 
                 UndergradStudent under = new UndergradStudent(firstName, lastName, studentID, gradLevel, graduated, GPA, gradeLevel);
                 linked_list.push(under);

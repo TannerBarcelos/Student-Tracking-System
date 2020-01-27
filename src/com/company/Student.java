@@ -6,7 +6,7 @@ public abstract class Student {
 
     //making final so they cannot be changed later
     protected final String firstName;
-   protected   final String lastName;
+    protected   final String lastName;
     protected final String student_ID;
     protected  double GPA;
     protected final boolean hasGraduated;
@@ -29,6 +29,10 @@ public abstract class Student {
 
     //good engineering practice: make getters for all superclass private members such that, we ensure safety on the class members BUT can still get to them with a getter
 
+    
+    //these methods are general across all students, so, we can implement them all within super class because no matter what, a student will share all these properties regardless: if they would no,
+    //we would suggest making them abstract such that each subclass can implement them in some different way
+    
     public String getFirstName(){
         return this.firstName;
     }
