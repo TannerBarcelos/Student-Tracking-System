@@ -1,9 +1,7 @@
 package com.company;
 
-
 import java.util.Scanner;
-import java.util.*;
-
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 
 public class Main {
@@ -17,6 +15,8 @@ public class Main {
         String firstName = "";
         String lastName = "";
         String gradLevel = "";
+        String studentID = "";
+        String cont = "";
         double GPA = 0.00;
         
         //create a scanner object for input
@@ -24,17 +24,54 @@ public class Main {
 
         while(true) {
 
-            //get users first name
-            System.out.println("Hello, what is your first name?");
-            firstName = input.nextLine().toLowerCase();
+            //get users first name: do not accept strings that are empty or less than 1 character
+        	while(true) {
+        		System.out.println("What is your first name?");
+                firstName = input.nextLine().toLowerCase();
+                if(firstName.length() < 2 || firstName.isEmpty()) {
+                	System.out.println("First name must be two or more characters AND not empty\n");
+                	//input.nextLine();	//reset scanner
+                }else {
+                	//input was valid: break
+                	break;
+                }
+        	}
+        	
+        	//get users last name: do not accept strings that are empty or less than 2 characters
+        	while(true) {
+                System.out.println("What is your last name?");
+                lastName = input.nextLine().toLowerCase();
+                if(lastName.length() < 2 || lastName.isEmpty()) {
+                	System.out.println("Last name must be two or more characters AND not empty\n");
+                }else {
+                	break;
+                }
+        		
+        	}
 
-            //get users last name
-            System.out.println("What is your last name?");
-            lastName = input.nextLine().toLowerCase();
-
-            //get users student ID
-            System.out.println("What is your student ID?");
-            String studentID = input.nextLine().toLowerCase();
+            //get users student ID : make sure it is 6 characters (no more, no less, and the first two characters are alphabetical)
+        	while(true) {
+        		System.out.println("What is your student ID?");
+                studentID = input.nextLine().toLowerCase();
+                
+                //convert to array to check first two characters are alphabetical
+                String [] charOf = studentID.split("");
+                
+                //TODO: There is a bug here where if the length is correct, it ommits the check for chars at [0] and [1]
+                
+                if((studentID.length() < 6 || studentID.length() > 6)) {
+                	System.out.println("Student ID MUST be 6 characters long\n");
+                }
+                
+                //check first two characters are alphabetical using regex: regex parameter is a string array of chars a-z (see geeksforgeeks)
+                if(!(charOf[0].matches("[a-z]") || charOf[1].matches("[a-z]"))) {
+                	System.out.println("First two charaters of student ID must be alphabetical\n");
+                }	
+                else {
+                	break;
+                }
+        	}
+            
            
             //for nice flow, loop until the user enters in the correct format
             while(true)
@@ -53,11 +90,21 @@ public class Main {
 
             //pick up new line to reset scanner to next input: different type inputs will not reset scanner to new line, so this i sa msut
             input.nextLine();
+            
+            //check if user entered in only two choices: undergrad or grad
+            while(true) {
 
-            //get users grad level: undergrad or graduate
-            System.out.println("What is your graduate level [undergraduate/graduate]");
-            gradLevel = input.nextLine().toLowerCase();
-
+                //get users grad level: undergrad or graduate
+                System.out.println("What is your graduate level [undergraduate/graduate]");
+                gradLevel = input.nextLine().toLowerCase();
+                
+                if(gradLevel.equals("undergraduate") || gradLevel.equals("graduate")) {
+                	break;
+                }else {
+                	System.out.println("Only Undergraduate or Graduate level allowed\n");
+                }
+            }
+            
 
             //if undergrad, get level. else, ignore and pass grad to object creation
             if (gradLevel.equals("undergraduate")) {
@@ -73,24 +120,37 @@ public class Main {
                 UndergradStudent under = new UndergradStudent(firstName, lastName, studentID, gradLevel, graduated, GPA, gradeLevel);
                 linked_list.push(under);
                 }
-            else {
-
+            
+            if (gradLevel.contentEquals("graduate")){
                 //get if user has graduated
                 System.out.println("Have you graduated [true/false]");
-                String hasGraduated = input.nextLine().toLowerCase();   //will need to convert to boolean or change data typoes of classes to string
+                String hasGraduated = input.nextLine().toLowerCase();   //will need to convert to boolean or change data types of classes to string
                 boolean graduated = hasGraduated.equals("true");    //assign boolean conversion to if user graduated or not (easy one liner)
 
                 GradStudent grad = new GradStudent(firstName, lastName, studentID, gradLevel, graduated, GPA);
                 linked_list.push(grad);
             }
-            System.out.println("Continue [y/n]");
-            String cont = input.nextLine().toLowerCase();
+            
 
-            //check continuation
-            if (cont.equals("n")) {
-            	input.close();//close the scanner
-                break;
+
+            while(true) {
+            	System.out.println("Continue [y/n]");
+            	cont = input.nextLine().toLowerCase();
+
+                if(!(cont.equals("y") || cont.equals("n"))) {
+                	System.out.println("Please only enter y to continue or n to quit\n");
+                }else {
+                	break;
+                }
+                
             }
+            
+          //check continuation for main student entry loop
+          if (cont.equals("n")) {
+            input.close();//close the scanner
+            break;
+          }
+
         }
 
         //call display
