@@ -41,7 +41,10 @@ public class Main {
 		        	System.out.println(line);
 		        }
 		        
-		        System.out.println("Press enter to continue\n");
+		        System.out.println("\n\nPress enter to continue\n");
+		        
+		        
+		        //TODO: ask user if they want to add to the file, or simply quit (adding would then jump to where the logic of adding students would begin, quit can be invoked by java method to quit program..)
 		        
 		      //close the buffer
 	        bufferedReader.close();
@@ -59,7 +62,7 @@ public class Main {
         	
         }
         
-        //else, file does not exist, so start a new one
+        //else, file does not exist, so start a new one and then jump to entering students (ask first if theyd like to do that immediately)
         else {
         	input.nextLine();	//reset the scanner for proper inputs
         	System.out.println("What would you like to name this file?");
