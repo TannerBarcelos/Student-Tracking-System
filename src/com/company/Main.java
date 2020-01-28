@@ -34,11 +34,29 @@ public class Main {
 				// Always wrap FileReader in BufferedReader.
 		        BufferedReader bufferedReader = new BufferedReader(inFile);
 		        
+		        String line = null;
+		        
+		        //read the contents and display them in console
+		        while((line = bufferedReader.readLine()) != null) {
+		        	System.out.println(line);
+		        }
+		        
+		        System.out.println("Press enter to continue\n");
+		        
+		      //close the buffer
+	        bufferedReader.close();
 		        
 			} catch (FileNotFoundException e) {
 				System.out.println(fileToOpen + ".txt " + "not found. Please double check the file exists or make a new file by restarting the program");
 				e.printStackTrace();
+			} 
+        	//for the while loop: needs its own catch
+        	catch (IOException e) {
+				System.out.println("Error reading data in file\n");
+				e.printStackTrace();
 			}
+        	
+        	
         }
         
         //else, file does not exist, so start a new one
