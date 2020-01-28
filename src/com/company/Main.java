@@ -15,6 +15,9 @@ public class Main {
         //create a scanner object for input
         Scanner input = new Scanner(System.in);
         
+        //path of directory where files are stored
+        final String abs_path = "/Users/tannerbarcelos/OneDrive/DEV/Java/Projects/Student Database/textOut/";
+        
         
         System.out.println("Open existing file or start new tracker? [1 for open, 2 for new]\n");
         int val = input.nextInt();
@@ -26,17 +29,19 @@ public class Main {
         	input.nextLine();	//reset
         	System.out.println("Please enter the file you wish to open...");
         	String fileToOpen = input.nextLine().toLowerCase();
-        	fileToOpen = fileToOpen + ".txt";	//append .txt to it for correctness
         	
-        	//try to open this file
+        	//copy the path of the text folder to the file to open via user entry
+        	fileToOpen = abs_path + fileToOpen + ".txt";	//append .txt to it for correctness
+        	
+        	//try to open this file (always try when doing forms of work that may fail (input, file opening, reading, etc.)
         	try {
 				FileReader inFile = new FileReader(fileToOpen);
-				System.out.println(fileToOpen + " successfully opened... Here are its contents\n\n");	//will be ignored if not and jump to catch
+				System.out.println("File successfully opened... Here are its contents\n\n");	//will be ignored if not and jump to catch
 				
 				// Always wrap FileReader in BufferedReader.
 		        BufferedReader bufferedReader = new BufferedReader(inFile);
 		        
-		        String line = null;
+		        String line = null;	//set line to null (before file line)
 		        
 		        //read the contents and display them in console
 		        while((line = bufferedReader.readLine()) != null) {
@@ -47,6 +52,26 @@ public class Main {
 		        
 		        
 		        //TODO: ask user if they want to add to the file, or simply quit (adding would then jump to where the logic of adding students would begin, quit can be invoked by java method to quit program..)
+		        int dec; //making input global so we can use the decision out of this block of scope 
+		        while(true) {
+		        	System.out.println("Would you like to add to this file or quit ? [1 to add, 2 to quit]\n");
+			        dec = input.nextInt();
+			        
+			        if(dec != 1 || dec != 2) {
+			        	System.out.println("1 or 2 entries only!\n");
+			        	
+			        }else {
+			        	break;
+			        }
+		        }
+		        
+		        //check entry for next steps: we only made it here if they entered 1 or 2 so we can invoke a simple else to handle case of 2
+		        if(dec == 1) {
+	        		//read the data in this file into a new linked list, and then keeep putting more students in that till they quit, and then re-write back to that file, all the data from LL separated by 3 new lines
+	        	}else {
+	        		System.exit(1);
+	        	}
+		        
 		        
 		      //close the buffer
 	        bufferedReader.close();
@@ -55,7 +80,7 @@ public class Main {
 				System.out.println(fileToOpen + ".txt " + "not found. Please double check the file exists or make a new file by restarting the program");
 				e.printStackTrace();
 			} 
-        	//for the while loop: needs its own catch
+        	//also catch the possibility of IOException: cannot read
         	catch (IOException e) {
 				System.out.println("Error reading data in file\n");
 				e.printStackTrace();
