@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.Scanner;
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 
@@ -8,8 +9,70 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //create a linked list to distribute the students in the system: of type student
+    	//create a linked list to distribute the students in the system: of type student
         LinkedList<Student> linked_list = new LinkedList<>();
+        
+        //create a scanner object for input
+        Scanner input = new Scanner(System.in);
+        
+        
+        System.out.println("Open existing file or start new tracker? [1 for open, 2 for new]\n");
+        int val = input.nextInt();
+
+        
+        if(val == 1) {
+        	input.nextLine();	//reset
+        	System.out.println("Please enter the file you wish to open...");
+        	String fileToOpen = input.nextLine().toLowerCase();
+        	fileToOpen = fileToOpen + ".txt";	//append .txt to it for correctness
+        	
+        	//try to open this file
+        	try {
+				FileReader inFile = new FileReader(fileToOpen);
+				System.out.println(fileToOpen + " successfully opened... Here are its contents\n\n");	//will be ignored if not and jump to catch
+				
+				// Always wrap FileReader in BufferedReader.
+		        BufferedReader bufferedReader = new BufferedReader(inFile);
+		        
+		        
+			} catch (FileNotFoundException e) {
+				System.out.println(fileToOpen + ".txt " + "not found. Please double check the file exists or make a new file by restarting the program");
+				e.printStackTrace();
+			}
+        }
+        
+        //else, file does not exist, so start a new one
+        else {
+        	input.nextLine();	//reset the scanner for proper inputs
+        	System.out.println("What would you like to name this file?");
+        	String fileName = input.nextLine();
+        	
+        	
+        	while(true) {
+        		//open text file
+                try {
+                	//make a new file object and try to open it: append . txt to it
+                	File file = new File(fileName+".txt");
+                	if(file.createNewFile()) {
+                		System.out.println(file.getName() + " successfully created. Press enter to continue...\n");
+                	}
+                	break;
+                }
+                //if it cannot be open, display an error
+                catch(IOException e) {
+                	System.out.println(fileName+".txt already exists. Please try again Or restart program to edit " + fileName + ".txt\nn");	//loops back around for another round : if the file exists
+                	e.printStackTrace();	
+                }
+            }
+        	}
+        	
+        	
+        
+        
+        input.nextLine();	//wait for user to press enter from the file creation above
+        
+        
+        
         
         //variables initialized outside the scope of the while,try's so they are global and can be used within nested try/catch scopes or in the loop. This ensures object is made correctly
         String firstName = "";
@@ -19,8 +82,7 @@ public class Main {
         String cont = "";
         double GPA = 0.00;
         
-        //create a scanner object for input
-        Scanner input = new Scanner(System.in);
+        
 
         while(true) {
 
@@ -169,23 +231,4 @@ public class Main {
             }
         }
     }
-
-
-
-
-
 }
-//NOTES:
-
-    /*
-    TODO:
-        1) Implement the error handling for menu dialog
-        2) Build out a file handling class. That is, when the program is finished, it will write all the students to a text file. The user is prompted
-        up front if they want to open a file (will be saved by date) or start a new one with new students. Whenever the user finishes working with
-        students, the file will be re-written to the directory where the files are saved (desktop) and exist. If the file never existed, upon the user
-        selectin 'new file' in the menu, a new file will be created and written to from the linked list, whenever the user is finished adding students
-        3)Implement the ability to add a student, edit a student and delete a student, add to existing file, start new file, etc. File implementations
-        will be done in its own class, but to add/change/delete a student will be an enumerated and then invoke functions locally in main file (no need to put
-        these methods in student class, as when the student object is made, we will already know all the students that exist)
-     */
-

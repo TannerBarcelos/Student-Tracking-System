@@ -57,10 +57,6 @@ public abstract class Student {
        return this.GPA;
     }
 
-
-    public String printStudentInfo(){
-        //format specifiers and then use the params to be filled into the placeholders
-        return String.format("%s:  %s%n%s:  %s%n%s:  %s%n%s:  %s%n%s: %s%n%s:  %s%n", "First name",this.firstName,
-                "Last Name",this.lastName,"Student ID",this.student_ID,"Graduate level", this.collegeLevel,"Graduated",this.hasGraduated,"GPA",this.GPA);
-    }
+    //abstract print: we have no idea what it means to print a student, only that we will print a student so this is too general. make it abstract
+    public abstract String printStudentInfo();
 }
