@@ -20,6 +20,8 @@ public class Main {
         int val = input.nextInt();
 
         
+        //TODO: Make a directory for files and go to that path: google up info on how to cd to that directory: i am assuming just make a string of the path that folder resides in
+        
         if(val == 1) {
         	input.nextLine();	//reset
         	System.out.println("Please enter the file you wish to open...");
