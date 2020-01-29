@@ -1,15 +1,12 @@
 package com.company;
 
-import java.util.Scanner;
-import java.awt.Desktop;
-import java.io.*;
-import java.util.InputMismatchException;
-import java.util.LinkedList;
-import java.util.*;
+import java.awt.*;	//for desktop
+import java.io.*;		//for files
+import java.util.*;		//for everything else in this file
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {	//throw exception immediately to cast the logic in an IO error handling state INCASE we encounter some exceptions
 
     	//create a linked list to distribute the students in the system: of type student
         LinkedList<Student> linked_list = new LinkedList<>();
@@ -20,14 +17,17 @@ public class Main {
         
         //Creating file objects globally so that the student entry portion can access these objects
         
+        //file pbject for the file the user wants to EDIT NOT CREATE
+        File fileForEdits = null;
+        
         //file object for writing
         File file = null;	//defined in the else block for a new file
-        
-        //file object for opening an existing file
-        FileReader inFile = null;
+
         
         //new file being writer object: used as a means of storing the file path retrieved from program opening
         String fileName = null;
+        
+        String fileToOpen = null;
         
         //path of directory where files are stored
         final String abs_path = "/Users/tannerbarcelos/OneDrive/DEV/Java/Projects/Student Database/textOut/";
@@ -42,7 +42,7 @@ public class Main {
         if(val == 1) {
         	input.nextLine();	//reset
         	System.out.println("Please enter the file you wish to open...");
-        	String fileToOpen = input.nextLine().toLowerCase();
+        	fileToOpen = input.nextLine().toLowerCase();
         	
         	//copy the path of the text folder to the file to open via user entry
         	fileToOpen = abs_path + fileToOpen + ".txt";	//concatenate.txt to it for correctness
@@ -50,7 +50,7 @@ public class Main {
         	
         	//try to open this file (always try when doing forms of work that may fail (input, file opening, reading, etc.)
         	try {
-				inFile = new FileReader(fileToOpen);
+				FileReader inFile = new FileReader(fileToOpen);
 				System.out.println("File successfully opened... Here are its contents\n\n");	//will be ignored if not and jump to catch
 				
 				//write to file if user wished to
@@ -63,12 +63,13 @@ public class Main {
 			        }
 					
 					//create a file object with the fileToOpen string that was created from the user input
-					File fileForEdits = new File(fileToOpen);
+					fileForEdits = new File(fileToOpen);
+
 					
 					//open the file physically
 					Desktop desktop = Desktop.getDesktop();
-					if(fileForEdits.exists()) {
-						desktop.open(fileForEdits);
+					if(fileForEdits.exists()) {	//check if it exists
+						desktop.open(fileForEdits);	//open it
 					}
 					
 				    } catch (FileNotFoundException e) {
@@ -79,27 +80,36 @@ public class Main {
 		        System.out.println("\n\nPress enter to continue\n");
 		        input.nextLine();
 		        
-		        
-
-	            //TODO: there is an issue here with input handling: need to do try/catch or something (inputmismatchexception??)
+		        //globalize decision to use in the next block
+		        int dec;
 		        while(true) {
-		        	System.out.println("Would you like to add to this file or quit ? [1 to add, 2 to see contents and quit]\n");	//invoke a way that will open the file automated when 2 is entered
-			        int dec = input.nextInt();
-			        
-			        if(dec != 1 || dec != 2) {
-			        	System.out.println("1 or 2 entries only!\n");
-			        	
-			        }else {
-			        	break;
-			        }
+		        	try {
+		        		System.out.println("Would you like to edit this file or quit ? [1 to edit, 2 to quit]\n");	//invoke a way that will open the file automated when 2 is entered
+				        dec = input.nextInt();
+				        if(dec == 1 || dec == 2) {
+				        	break;
+				        }
+		        	}catch(InputMismatchException e) {
+		        		System.out.println("Only enter 1 or 2");
+		        	}
+		        	
 		        }
 		        
-		        //check entry for next steps: we only made it here if they entered 1 or 2 so we can invoke a simple else to handle case of 2
-		        if(dec == 1) {
-	        		//TODO: read the data in this file into a new linked list, and then keep putting more students in that till they quit, and then re-write back to that file, all the data from LL separated by 3 new lines
-	        	}else {
-	        		//System.exit(1);
-	        	}
+		        if(dec == 2) {
+		        	//entered 2 to quit: so quit
+	        		System.exit(1);
+		        }
+		        //else, user wants to edit file so TODO: build out the functionality to edit the file (probably will involve turning the object methods below to be in a function)
+		        else {
+		        	File appendFile = new File(fileToOpen);
+					
+					//call write to file
+		        	
+		        	//TODO: this is overriding the contents that already exist! So, we must find the end of line and write at that point
+					writeFile(linked_list,appendFile);
+		        	
+		        	
+		        }
 
 		        
 			} catch (FileNotFoundException e) {
@@ -113,8 +123,6 @@ public class Main {
 				//e.printStackTrace();
 				System.exit(1);
 			}
-        	
-        	
         }
         
         //else, file does not exist, so start a new one and then jump to entering students (ask first if theyd like to do that immediately)
@@ -136,7 +144,8 @@ public class Main {
                 	file = new File(fileName);
                 	if(file.createNewFile()) {
                 		System.out.println(file.getName() + " successfully created. Press enter to continue...\n");
-                		//input.nextLine(); line 137 invokes
+                		//write to file
+                		writeFile(linked_list,file);
                 		break;
                 	}
                 }
@@ -148,12 +157,14 @@ public class Main {
                // break;
             }
         }
-        	
-        	
-//////////////////////////////////////////////////////////////////////////////////////Now work with writing actual data////////////////////////////////////////////////////////////////////////////////////////////////////       
-        
-        
-        input.nextLine();	//wait for user to press enter from the file creation above
+        	input.close();//close the scanner
+}
+    
+    //takes in a linked list to add to and a file object that i will be writin to
+    public static void writeFile(LinkedList<Student>linked_list, File file) {
+    	
+    	Scanner input = new Scanner(System.in);
+    	input.nextLine();	//wait for user to press enter from the file creation above
         
         System.out.println("Please add students to this file. When done, follow the on-screen prompt to quit\n");
         
@@ -293,25 +304,22 @@ public class Main {
           //check continuation for main student entry loop
           if (cont.equals("n")) {
             input.close();//close the scanner
-            
-            //create a new writing object for the linked list to write to the file: build out of scope of try/catch so the for loop for writng can access this
-            FileWriter writer = null;
 
             try {
             	
-            	//write to file
-				writer = new FileWriter(fileName);	//filename came from the name of the new file the user wanted to make
+				FileWriter writer = new FileWriter(file,true);	//create the new file writer, passing the file object in from function parameter and set to 'true' for append mode! (will handle edit case)
 				
-				writer.write("\t\tStudent information\n\n");
+				BufferedWriter bw = new BufferedWriter(writer);	//create a buffer writer for Java 7+ recommendation AND performance
+				
 	            
 	            //write all nodes to the file
 	            for(Student i : linked_list) {
 	            	//extract the students info on this element: remember, the printStudentInfo is an abstract method that returns a formatted string on the object that we are working on! This is so easy
 	            	String stud = i.printStudentInfo();
 	            	//write it
-	            	writer.write(stud + "\n\n");
+	            	bw.write(stud + "\n\n");
 	            }
-	            writer.close();
+	            bw.close();
 	            System.out.println("Thank you. Goodbye\n");
 	            System.exit(1);
 			}

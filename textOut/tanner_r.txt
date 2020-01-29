@@ -1,0 +1,29 @@
+		Student information
+
+First name:  hello
+Last Name:  worl
+Student ID:  de3434
+Graduate level:  graduate
+Graduated: false
+GPA:  4.0
+
+
+		Student information
+
+First name:  bob
+Last Name:  builder
+Student ID:  ed3434
+Graduate level:  graduate
+Graduated: false
+GPA:  3.9
+
+
+First name:  hayden
+Last Name:  barcelos
+Student ID:  wd3434
+Graduate level: undergraduate
+Grade Level:  sophomore
+Graduated:  true
+GPA:  3.0
+
+
