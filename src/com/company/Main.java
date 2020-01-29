@@ -1,9 +1,11 @@
 package com.company;
 
 import java.util.Scanner;
+import java.awt.Desktop;
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.*;
 
 public class Main {
 
@@ -44,29 +46,43 @@ public class Main {
         	//copy the path of the text folder to the file to open via user entry
         	fileToOpen = abs_path + fileToOpen + ".txt";	//append .txt to it for correctness
         	
+        	
         	//try to open this file (always try when doing forms of work that may fail (input, file opening, reading, etc.)
         	try {
 				inFile = new FileReader(fileToOpen);
 				System.out.println("File successfully opened... Here are its contents\n\n");	//will be ignored if not and jump to catch
 				
-				// Always wrap FileReader in BufferedReader.
-		        BufferedReader bufferedReader = new BufferedReader(inFile);
-		        
-		        String line = null;	//set line to null (before file line)
-		        
-		        //read the contents and display them in console
-		        while((line = bufferedReader.readLine()) != null) {
-		        	System.out.println(line);
-		        }
+				//write to file if user wished to
+				try {
+					
+					//check for certified desktop
+					if(!Desktop.isDesktopSupported()){
+			            System.out.println("Desktop is not supported");
+			            //return;
+			        }
+					
+					//create a file object with the fileToOpen string that was created from the user input
+					File fileForEdits = new File(fileToOpen);
+					
+					//open the file physically
+					Desktop desktop = Desktop.getDesktop();
+					if(fileForEdits.exists()) {
+						desktop.open(fileForEdits);
+					}
+					
+				    } catch (FileNotFoundException e) {
+				      System.out.println("An error occurred.");
+				      e.printStackTrace();
+				    }
 		        
 		        System.out.println("\n\nPress enter to continue\n");
 		        input.nextLine();
 		        
 		        
-		        //TODO: ask user if they want to add to the file, or simply quit (adding would then jump to where the logic of adding students would begin, quit can be invoked by java method to quit program..)
-		        int dec; //making input global so we can use the decision out of this block of scope 
+
+	            //TODO: there is an issue here with input handling: need to do try/catch or something (inputmismatchexception??)
 		        while(true) {
-		        	System.out.println("Would you like to add to this file or quit ? [1 to add, 2 to quit]\n");
+		        	System.out.println("Would you like to add to this file or quit ? [1 to add, 2 to see contents and quit]\n");	//invoke a way that will open the file automated when 2 is entered
 			        dec = input.nextInt();
 			        
 			        if(dec != 1 || dec != 2) {
@@ -81,21 +97,20 @@ public class Main {
 		        if(dec == 1) {
 	        		//TODO: read the data in this file into a new linked list, and then keep putting more students in that till they quit, and then re-write back to that file, all the data from LL separated by 3 new lines
 	        	}else {
-	        		System.exit(1);
+	        		//System.exit(1);
 	        	}
-		        
-		        
-		      //close the buffer
-	        bufferedReader.close();
+
 		        
 			} catch (FileNotFoundException e) {
 				System.out.println(fileToOpen + " not found. Please restart the program\n");
 				//e.printStackTrace();
+				System.exit(1);
 			} 
         	//also catch the possibility of IOException: cannot read
         	catch (IOException e) {
-				System.out.println("Error reading data in file\n");
+				System.out.println("Error reading data in file. Please restart program\n");
 				//e.printStackTrace();
+				System.exit(1);
 			}
         	
         	
@@ -262,7 +277,6 @@ public class Main {
             }
             
 
-
             while(true) {
             	System.out.println("Continue [y/n]");
             	cont = input.nextLine().toLowerCase();
@@ -279,45 +293,35 @@ public class Main {
           if (cont.equals("n")) {
             input.close();//close the scanner
             
-            //create a new writing object for the linked list to write to the file
+            //create a new writing object for the linked list to write to the file: build out of scope of try/catch so the for loop for writng can access this
             FileWriter writer = null;
 
             try {
-				writer = new FileWriter(fileName);
+            	
+            	//write to file
+				writer = new FileWriter(fileName);	//filename came from the name of the new file the user wanted to make
+				
+				writer.write("\t\tStudent information\n\n");
+	            
+	            //write all nodes to the file
+	            for(Student i : linked_list) {
+	            	//extract the students info on this element: remember, the printStudentInfo is an abstract method that returns a formatted string on the object that we are working on! This is so easy
+	            	String stud = i.printStudentInfo();
+	            	//write it
+	            	writer.write(stud + "\n\n");
+	            }
+	            writer.close();
+	            System.out.println("Thank you. Goodbye\n");
+	            System.exit(1);
 			}
             //catch IO errors if it cannot open
             catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Failed to write to file. Restart program\n");
+				//e.printStackTrace();	//not interested in printing the error. just catch it and move on
 			}
             
-            //write all nodes to the file
-            for(Student i : linked_list) {
-            	//extract the students info on this element: remember, the printStudentInfo is an abstract method that returns a formatted string on the object that we are working on! This is so easy
-            	String stud = i.printStudentInfo();
-            	//write it
-            	writer.write(stud + "\n\n\n\n");
-            }
-            writer.close();
-            break;
           }
 
-        }
-
-        //call display
-        displayListItems(linked_list);
-    }
-
-
-    //display function for the linked list
-    public static void displayListItems(LinkedList<Student>stud){
-        if(stud.isEmpty()){
-            System.out.println("List is empty. Goodbye");
-        }else{
-            //for-each loop
-            for(Student i : stud){
-                System.out.println(i.printStudentInfo());
-            }
         }
     }
 }
