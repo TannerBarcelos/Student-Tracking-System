@@ -15,11 +15,19 @@ public class Main {
         //create a scanner object for input
         Scanner input = new Scanner(System.in);
         
+        
+        //Creating file objects globalls so that the student entry portion can access these objects
+        //file object for writing
+        File file;	//defined in the else block for a new file
+        
+        //file object for opening an existing file
+        FileReader inFile;
+        
         //path of directory where files are stored
         final String abs_path = "/Users/tannerbarcelos/OneDrive/DEV/Java/Projects/Student Database/textOut/";
         
         
-        System.out.println("Open existing file or start new tracker? [1 for open, 2 for new]\n");
+        System.out.println("Open existing file or start new tracker? The directory of files is within this applications root...[1 for open, 2 for new]\n");
         int val = input.nextInt();
 
         
@@ -35,7 +43,7 @@ public class Main {
         	
         	//try to open this file (always try when doing forms of work that may fail (input, file opening, reading, etc.)
         	try {
-				FileReader inFile = new FileReader(fileToOpen);
+				inFile = new FileReader(fileToOpen);
 				System.out.println("File successfully opened... Here are its contents\n\n");	//will be ignored if not and jump to catch
 				
 				// Always wrap FileReader in BufferedReader.
@@ -91,22 +99,27 @@ public class Main {
         
         //else, file does not exist, so start a new one and then jump to entering students (ask first if theyd like to do that immediately)
         else {
-        	input.nextLine();	//reset the scanner for proper inputs
-        	System.out.println("What would you like to name this file?");
-        	String fileName = input.nextLine();
-        	
-        	
+        	//create the file: if its a duplicate, make a new one
         	while(true) {
+        		
+        		//input.nextLine();	//reset the scanner for proper inputs
+            	System.out.println("What would you like to name this file?");
+            	String fileName = input.nextLine();
+            	
+            	//go to the path and create the file with the path strings
+            	fileName = abs_path + fileName + ".txt";
+            	
+            	
         		//open text file
                 try {
                 	//make a new file object and try to open it: append . txt to it
-                	File file = new File(fileName+".txt");
+                	file = new File(fileName+".txt");
                 	if(file.createNewFile()) {
                 		System.out.println(file.getName() + " successfully created. Press enter to continue...\n");
                 	}
                 	break;
                 }
-                //if it cannot be open, display an error
+                //if it cannot be open, display an error: will catch this
                 catch(IOException e) {
                 	System.out.println(fileName+".txt already exists. Please try again Or restart program to edit " + fileName + ".txt\nn");	//loops back around for another round : if the file exists
                 	e.printStackTrace();	
@@ -115,11 +128,12 @@ public class Main {
         	}
         	
         	
+//////////////////////////////////////////////////////////////////////////////////////Now work with writing actual data////////////////////////////////////////////////////////////////////////////////////////////////////       
         
         
         input.nextLine();	//wait for user to press enter from the file creation above
         
-        
+        System.out.println("Please add students to this file. When done, follow the on-screen prompt to quit\n");
         
         
         //variables initialized outside the scope of the while,try's so they are global and can be used within nested try/catch scopes or in the loop. This ensures object is made correctly
