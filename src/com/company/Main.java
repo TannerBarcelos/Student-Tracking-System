@@ -18,12 +18,13 @@ public class Main {
         Scanner input = new Scanner(System.in);
         
         
-        //Creating file objects globalls so that the student entry portion can access these objects
+        //Creating file objects globally so that the student entry portion can access these objects
+        
         //file object for writing
-        File file;	//defined in the else block for a new file
+        File file = null;	//defined in the else block for a new file
         
         //file object for opening an existing file
-        FileReader inFile;
+        FileReader inFile = null;
         
         //new file being writer object: used as a means of storing the file path retrieved from program opening
         String fileName = null;
@@ -44,7 +45,7 @@ public class Main {
         	String fileToOpen = input.nextLine().toLowerCase();
         	
         	//copy the path of the text folder to the file to open via user entry
-        	fileToOpen = abs_path + fileToOpen + ".txt";	//append .txt to it for correctness
+        	fileToOpen = abs_path + fileToOpen + ".txt";	//concatenate.txt to it for correctness
         	
         	
         	//try to open this file (always try when doing forms of work that may fail (input, file opening, reading, etc.)
@@ -83,7 +84,7 @@ public class Main {
 	            //TODO: there is an issue here with input handling: need to do try/catch or something (inputmismatchexception??)
 		        while(true) {
 		        	System.out.println("Would you like to add to this file or quit ? [1 to add, 2 to see contents and quit]\n");	//invoke a way that will open the file automated when 2 is entered
-			        dec = input.nextInt();
+			        int dec = input.nextInt();
 			        
 			        if(dec != 1 || dec != 2) {
 			        	System.out.println("1 or 2 entries only!\n");
