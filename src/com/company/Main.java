@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
     	//create a linked list to distribute the students in the system: of type student
         LinkedList<Student> linked_list = new LinkedList<>();
@@ -22,6 +22,9 @@ public class Main {
         
         //file object for opening an existing file
         FileReader inFile;
+        
+        //new file being writer object: used as a means of storing the file path retrieved from program opening
+        String fileName = null;
         
         //path of directory where files are stored
         final String abs_path = "/Users/tannerbarcelos/OneDrive/DEV/Java/Projects/Student Database/textOut/";
@@ -57,6 +60,7 @@ public class Main {
 		        }
 		        
 		        System.out.println("\n\nPress enter to continue\n");
+		        input.nextLine();
 		        
 		        
 		        //TODO: ask user if they want to add to the file, or simply quit (adding would then jump to where the logic of adding students would begin, quit can be invoked by java method to quit program..)
@@ -75,7 +79,7 @@ public class Main {
 		        
 		        //check entry for next steps: we only made it here if they entered 1 or 2 so we can invoke a simple else to handle case of 2
 		        if(dec == 1) {
-	        		//read the data in this file into a new linked list, and then keeep putting more students in that till they quit, and then re-write back to that file, all the data from LL separated by 3 new lines
+	        		//TODO: read the data in this file into a new linked list, and then keep putting more students in that till they quit, and then re-write back to that file, all the data from LL separated by 3 new lines
 	        	}else {
 	        		System.exit(1);
 	        	}
@@ -85,13 +89,13 @@ public class Main {
 	        bufferedReader.close();
 		        
 			} catch (FileNotFoundException e) {
-				System.out.println(fileToOpen + ".txt " + "not found. Please double check the file exists or make a new file by restarting the program");
-				e.printStackTrace();
+				System.out.println(fileToOpen + " not found. Please restart the program\n");
+				//e.printStackTrace();
 			} 
         	//also catch the possibility of IOException: cannot read
         	catch (IOException e) {
 				System.out.println("Error reading data in file\n");
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
         	
         	
@@ -104,7 +108,7 @@ public class Main {
         		
         		//input.nextLine();	//reset the scanner for proper inputs
             	System.out.println("What would you like to name this file?");
-            	String fileName = input.nextLine();
+            	fileName = input.nextLine();
             	
             	//go to the path and create the file with the path strings
             	fileName = abs_path + fileName + ".txt";
@@ -113,19 +117,21 @@ public class Main {
         		//open text file
                 try {
                 	//make a new file object and try to open it: append . txt to it
-                	file = new File(fileName+".txt");
+                	file = new File(fileName);
                 	if(file.createNewFile()) {
                 		System.out.println(file.getName() + " successfully created. Press enter to continue...\n");
+                		//input.nextLine(); line 137 invokes
+                		break;
                 	}
-                	break;
                 }
                 //if it cannot be open, display an error: will catch this
                 catch(IOException e) {
-                	System.out.println(fileName+".txt already exists. Please try again Or restart program to edit " + fileName + ".txt\nn");	//loops back around for another round : if the file exists
-                	e.printStackTrace();	
+                	System.out.println(fileName+" already exists. Please try again Or restart program to edit " + fileName);	//loops back around for another round : if the file exists
+                	//e.printStackTrace();	
                 }
+               // break;
             }
-        	}
+        }
         	
         	
 //////////////////////////////////////////////////////////////////////////////////////Now work with writing actual data////////////////////////////////////////////////////////////////////////////////////////////////////       
@@ -268,10 +274,31 @@ public class Main {
                 }
                 
             }
-            
+
           //check continuation for main student entry loop
           if (cont.equals("n")) {
             input.close();//close the scanner
+            
+            //create a new writing object for the linked list to write to the file
+            FileWriter writer = null;
+
+            try {
+				writer = new FileWriter(fileName);
+			}
+            //catch IO errors if it cannot open
+            catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            //write all nodes to the file
+            for(Student i : linked_list) {
+            	//extract the students info on this element: remember, the printStudentInfo is an abstract method that returns a formatted string on the object that we are working on! This is so easy
+            	String stud = i.printStudentInfo();
+            	//write it
+            	writer.write(stud + "\n\n\n\n");
+            }
+            writer.close();
             break;
           }
 
