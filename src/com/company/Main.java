@@ -29,7 +29,7 @@ public class Main {
         
         String fileToOpen = null;
         
-        //path of directory where files are stored
+        //path of directory where files are stored (replace with the full path where this file is saved on your own system but make sure the directory to save files is called textOut in your src folder)
         final String abs_path = "/Users/tannerbarcelos/OneDrive/DEV/Java/Projects/Student Database/textOut/";
         
         

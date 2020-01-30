@@ -1,0 +1,9 @@
+First name:  tanner
+Last Name:  barcelods
+Student ID:  wf8585
+Graduate level: undergraduate
+Grade Level:  senior
+Graduated:  true
+GPA:  3.9
+
+
